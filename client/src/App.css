@@ -1,0 +1,22 @@
+.user-card {
+  border: 1px solid;
+  width: 200px;
+  padding: 10px;
+}
+
+.user-container {
+  padding: 5px 16px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.schedule-card {
+  height: 150px;
+  width: 800px;
+  background-color: #555;
+  background-color: lightgray;
+  text-align: center;
+  padding: 20px;
+}
