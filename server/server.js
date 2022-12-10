@@ -10,24 +10,6 @@ app.get("/", async (req, res) => {
     res.json(allUsers);
 });
 
-// app.get("/", async (req, res) => {
-//     const allCustomers = await prisma.customers.findMany({
-//         include: {
-//             contacts: true,
-//         },
-//     });
-//     res.json(allCustomers);
-// });
-
-// app.get("/contacts", async (req, res) => {
-//     const allContacts = await prisma.contacts.findMany({
-//         include: {
-//             customers: true,
-//         },
-//     });
-//     res.json(allContacts);
-// });
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
