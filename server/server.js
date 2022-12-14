@@ -3,18 +3,26 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+// const session = require("express-session")
 
-const DATABASE_URL = process.env.DATABASE_URL
+const MONGO_URI = process.env.MONGO_URI
 const PORT = process.env.PORT
 
 // Mongoose connection
 mongoose.set('strictQuery', true);
-mongoose.connect(DATABASE_URL)
+mongoose.connect(MONGO_URI)
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to database'))
 
 app.use(express.json())
+// app.use(
+//     session({
+//       secret: process.env.SECRET, //a random string do not copy this value or your stuff will get hacked
+//       resave: false, // default more info: https://www.npmjs.com/package/express-session#resave
+//       saveUninitialized: true, // default  more info: https://www.npmjs.com/package/express-session#resave
+//     })
+//   );
 
 // User router
 const userRouter = require('./routes/user')

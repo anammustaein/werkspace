@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt')
+
+// Data models
 const User = require('../models/user')
 const Task = require('../models/task')
 
