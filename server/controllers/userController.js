@@ -12,33 +12,8 @@ const userList = async (req, res) => {
     }
 }
 
-// Find user by id
-const findUser = async (req, res) => {
-    res.json(res.user)
-}
-
-// Show user's task list (by user id)
-const userTaskList = async (req, res) => {
-    try {
-        const userId = req.params.id // this is retrieved from url. re-write once sessions is implemented
-        const taskList = await Task.find({attendees : {$all: [userId]}}, [
-            "title", 
-            "type", 
-            "description",
-            "location", 
-            "startTime", 
-            "endTime",
-            "createdBy",
-            "attendees"
-        ])
-        res.status(200).json({taskList})
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-}
-
-// Create new user
-const createUser = async (req, res) => {
+// Register new user
+const registerUser = async (req, res) => {
     const email = req.body.email;
 
     const user = new User({
@@ -60,6 +35,7 @@ const createUser = async (req, res) => {
             return
         } else {
             const newUser = await user.save()
+            req.session.userId = newUser._id
             res.status(201).json(newUser)
         }
     } catch (err) {
@@ -67,47 +43,175 @@ const createUser = async (req, res) => {
     }
 }
 
+// User login
+const loginUser = async (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+
+    try {
+        const user = await User.findOne({email}).exec()
+        if (!user) {
+            res.status(404).json({ message: 'User not found' })
+            return
+        }
+
+        const loginPass = bcrypt.compareSync(password, user.password)
+        if (loginPass) {
+            req.session.userId = user._id
+            res.status(202).json({ 
+                message: 'Login successful',
+                id: user._id,
+                name: user.name
+            })
+        } else {
+            req.session.userId = null
+            res.status(401).json({
+                message: 'Password incorrect'
+            })
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
+
+// Search user by id
+const searchUser = async (req, res) => {
+    try {
+        const searchText = req.body.searchText
+        const userListRaw = await User.find({
+            $or: [{ email: {$regex: searchText} }, { name: {$regex: searchText} }]
+        }, null, {limit: 5})
+        const userList = userListRaw.map((user) => {
+            return {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                department: user.department,
+                designation: user.designation,
+                workingHours: user.workingHours,
+                workMode: user.workMode,
+                status: user.status
+            }
+        })
+        res.status(200).json(userList)
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+// Show user's task list (by user id)
+const userTaskList = async (req, res) => {
+    try {
+        // const userId = req.params.id
+        const userId = req.session.userId
+        const taskList = await Task.find({attendees : {$all: [userId]}}, [
+            "title", 
+            "type", 
+            "description",
+            "location", 
+            "startTime", 
+            "endTime",
+            "createdBy",
+            "attendees"
+        ])
+        res.status(200).json({taskList})
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
+
 // Update user
 const updateUserProfile = async (req, res) => {
-    if (req.body.name != null) {
-        res.user.name = req.body.name
-    }
-    if (req.body.email != null) {
-        res.user.email = req.body.email
-    }
-    if (req.body.password != null) {
-        res.user.password = req.body.password
-    }
-    if (req.body.department != null) {
-        res.user.department = req.body.department
-    }
-    if (req.body.designation != null) {
-        res.user.designation  = req.body.designation 
-    }
+    const name = req.body.name
+    const email = req.body.email
+    const password = bcrypt.hashSync(req.body.password, 10)
+    const department = req.body.department
+    const designation = req.body.designation
+
     try {
-        const updatedUser = await res.user.save()
-        res.json(updatedUser)
+        const userId = req.session.userId
+        const user = await User.findById(userId)
+        const existingUser = await User.findOne({ email: email })
+
+        // Check for empty fields
+        if ((!name) || (!email) || (!password) || (!department) || (!designation)) {
+            res.status(400).json({
+                message: 'Required fields cannot be empty'
+            })
+        }
+
+        // Check for existing users with the same email
+        if ((existingUser) && user.email != email) {
+            res.status(409).json({
+                message: 'Email has already been used'
+            })
+            return
+        }
+
+        user.name = name
+        user.email = email
+        user.password = password
+        user.department = department
+        user.designation = designation
+
+        await user.save()
+        res.status(202).json({
+            message: 'Profile updated successfully',
+            id: user.id,
+            name: user.name
+        })
     } catch (err) {
-        res.status(400).json({ message: err.message })
+        res.status(500).json({ 
+            message: err.message
+        })
     }
 }
 
 // Update user work status
 const updateUserStatus = async (req, res) => {
-    if (req.body.workingHours != null) {
-        res.user.workingHours = req.body.workingHours
-    }
-    if (req.body.workMode != null) {
-        res.user.workMode = req.body.workMode
-    }
-    if (req.body.status != null) {
-        res.user.status = req.body.status
-    }
+    const workingHours = req.body.workingHours
+    const workMode = req.body.workMode
+    const status = req.body.status
+
     try {
-        const updatedUser = await res.user.save()
-        res.json(updatedUser)
+        const userId = req.session.userId
+        const user = await User.findById(userId)
+
+        // Check for empty fields
+        if ((!workingHours) || (!workMode) || (!status)) {
+            res.status(400).json({
+                message: 'Required fields cannot be empty'
+            })
+        }
+
+        user.workingHours = workingHours
+        user.workMode = workMode
+        user.status = status
+
+        await user.save()
+        res.status(202).json({
+            message: 'Status updated successfully',
+            id: user.id,
+            name: user.name
+        })
     } catch (err) {
-        res.status(400).json({ message: err.message })
+        res.status(500).json({ message: err.message })
+    }
+}
+
+// User logout
+const logoutUser = async (req, res) => {
+    try {
+        if (!req.session.userId) {
+            res.status(400).json({ message: 'No user is logged in' })
+            return
+        }
+        req.session.userId = null
+        res.status(202).json({ message: 'Logout successful' })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
     }
 }
 
@@ -121,4 +225,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {userList, findUser, userTaskList, createUser, updateUserProfile, updateUserStatus, deleteUser}
+module.exports = {userList, registerUser, loginUser, searchUser, userTaskList, updateUserProfile, updateUserStatus, logoutUser, deleteUser}
