@@ -8,7 +8,7 @@ const {getUser} = require("../middleware/getUser")
 // Routes
 userRouter.get('/', userList)
 userRouter.get('/:id', getUser, findUser)
-userRouter.get('/:id/tasks', getUser, userTaskList)
+userRouter.get('/:id/tasks', userTaskList)
 userRouter.post('/createuser', createUser)
 userRouter.patch('/update/:id', getUser, updateUserProfile)
 userRouter.patch('/status/:id', getUser, updateUserStatus)

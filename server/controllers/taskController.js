@@ -65,7 +65,7 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
     try {
         await res.task.remove()
-        res.json({ message: 'Successfully deleted task'})
+        res.json({ message: 'Successfully deleted task' })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

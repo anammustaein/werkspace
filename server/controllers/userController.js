@@ -20,11 +20,11 @@ const findUser = async (req, res) => {
 // Show user's task list (by user id)
 const userTaskList = async (req, res) => {
     try {
-        const userId = req.body._id
+        const userId = req.params.id // this is retrieved from url. re-write once sessions is implemented
         const taskList = await Task.find({attendees : {$all: [userId]}}, [
             "title", 
             "type", 
-            "description", 
+            "description",
             "location", 
             "startTime", 
             "endTime",
@@ -56,7 +56,7 @@ const createUser = async (req, res) => {
         // Check if email has been used
         const existingUser = await User.findOne({email}).exec()
         if (existingUser) {
-            res.status(409).json({ message: 'Email has already been used'})
+            res.status(409).json({ message: 'Email has already been used' })
             return
         } else {
             const newUser = await user.save()
@@ -115,7 +115,7 @@ const updateUserStatus = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         await res.user.remove()
-        res.json({ message: 'Successfully deleted user'})
+        res.json({ message: 'Successfully deleted user' })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
