@@ -7,7 +7,7 @@ const {getUser} = require('../middleware/getUser')
 const {protect} = require('../middleware/protect')
 
 // Routes
-userRouter.get('/', userList)
+userRouter.get('/userlist', userList)
 userRouter.post('/register', registerUser) // session required (done)
 userRouter.post('/login', loginUser) // session required (done)
 userRouter.get('/search', protect, searchUser) // session required (done)

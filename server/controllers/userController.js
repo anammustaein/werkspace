@@ -68,6 +68,7 @@ const loginUser = async (req, res) => {
             res.status(401).json({
                 message: 'Password incorrect'
             })
+            return
         }
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -122,7 +123,7 @@ const userTaskList = async (req, res) => {
     }
 }
 
-// Update user
+// Update user profile
 const updateUserProfile = async (req, res) => {
     const name = req.body.name
     const email = req.body.email
@@ -140,6 +141,7 @@ const updateUserProfile = async (req, res) => {
             res.status(400).json({
                 message: 'Required fields cannot be empty'
             })
+            return
         }
 
         // Check for existing users with the same email
@@ -184,6 +186,7 @@ const updateUserStatus = async (req, res) => {
             res.status(400).json({
                 message: 'Required fields cannot be empty'
             })
+            return
         }
 
         user.workingHours = workingHours
