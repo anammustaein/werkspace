@@ -1,26 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Login() {
 
-    const handleSubmit = (event) => {
-        event.preventDefualt();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        console.log (
+            "Email:", email, "Password:", password
+        )
     }
 
     return (
         <div>
             <div className="login-form">
                 <h1>Login</h1>
-                <form>
+                <form
+                autoComplete="off"
+                onSubmit={handleSubmit}>
                     <label>Email:</label>
                     <br/>
-                    <input type="text" placeholder="Enter email here"/>
+                    <input 
+                    type="email" 
+                    id="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    required
+                    />
                     <br/>
                     <label>Password:</label>
                     <br/>
-                    <input type="password" placeholder="Enter password here"/>
+                    <input 
+                    type="password" 
+                    id="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    required
+                    />
                     <br/>
-                    <input type="submit" value="Log in" onClick={handleSubmit}/>
+                    <button>Log in</button>
                     </form>
             </div>
             <div className="form-base">

@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const session = require("express-session")
+const path = require('path')
 
 const MONGO_URI = process.env.MONGO_URI
 const PORT = process.env.PORT
@@ -26,14 +27,19 @@ app.use(
 
 // User router
 const userRouter = require('./routes/user')
-app.use('/user', userRouter)
+app.use('/api/user', userRouter)
 
 // Task router
 const taskRouter = require('./routes/task')
-app.use('/task', taskRouter)
+app.use('/api/task', taskRouter)
 
 // Seed data
-const seedData = require("./controllers/seedDataController")
+const seedData = require('./controllers/seedDataController')
 app.post('/seed', seedData)
+
+// Connect to front end
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve('../client/index.html'));
+});
 
 app.listen(PORT, () => console.log('Server started'))
