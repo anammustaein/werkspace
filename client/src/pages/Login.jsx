@@ -32,8 +32,8 @@ function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const email = event.target.email.value
-        const password = event.target.password.value
+        const email = event.target.email.value;
+        const password = event.target.password.value;
 
         fetch('/api/user/login', {
             method: 'POST',
