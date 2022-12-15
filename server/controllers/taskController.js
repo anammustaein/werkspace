@@ -65,7 +65,7 @@ const editTask = async (req, res) => {
     const taskCreatorId = task.createdBy
 
     try {
-        // Check if logged in user is the creator of the task
+        // Check if logged in user is task creator
         // Only creators can edit the task
         if (userId != taskCreatorId) {
             res.status(401).json({
@@ -108,28 +108,31 @@ const deleteTask = async (req, res) => {
     const taskCreatorId = task.createdBy
 
     try {
-        // Check if logged in user is the creator of the task
+        // Check if logged in user is task creator
         // Only creators can delete the task
         if (userId != taskCreatorId) {
             res.status(401).json({
                 message: 'Not authorized'
             })
             return
+        } else {
+            await Task.findByIdAndDelete(taskId)
         }
 
-        // Check if task exists
-        if (!task) {
-            res.status(404).json({
-                message: 'Task not found'
+        if (task === null) {
+            res.status(400).json({
+                message: 'Incorrect task ID'
             })
+            return
         }
 
-        await task.remove()
-        res.json(200).json({
-            message: 'Successfully deleted task'
+        res.status(200).json({
+            message: 'Task deleted successfully'
         })
     } catch (err) {
-        res.status(500).json({ message: err.message })
+        res.status(500).json({
+            message: err.message
+        })
     }
 }
 
