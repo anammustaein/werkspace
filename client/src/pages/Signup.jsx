@@ -8,7 +8,7 @@ function Signup() {
     const navigate = useNavigate();
     const userId = useSelector((state) => state.user.id);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const name = event.target.name.value;
         const email = event.target.email.value;
@@ -20,7 +20,7 @@ function Signup() {
         const workingHours = startTime + " - " + endTime;
         const workMode = "In office";
         const status = "Available";
-
+        
         fetch('api/user/register', {
             method: "POST",
             headers: {

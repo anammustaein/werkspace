@@ -12,22 +12,24 @@ function Login() {
 
     useEffect(() => {
         if (userId === "") {
-            fetch('/api/users/checklogin').then((res) => {
-                if (res.status === 200){
-                    return res.json()
-                }
-                throw new Error({
-                    message: "No user logged in"
+            const fetchData = async () => {
+                fetch('/api/users/checklogin').then((res) => {
+                    if (res.status === 200){
+                        return res.json()
+                    }
+                    throw new Error({
+                        message: "No user logged in"
+                    })
+                }).then((data) => {
+                    dispatch(updateLoggedInUser(data))
+                    navigate('/home')
+                }).catch((err) => {
+                    console.log(err)
                 })
-            }).then((data) => {
-                dispatch(updateLoggedInUser(data))
-                navigate('/home')
-            }).catch((err) => {
-                console.log(err)
-            })
-        } else {
-            navigate('/home')
+            }
+            fetchData();
         }
+        return;
     }, []);
 
     const handleSubmit = async (event) => {

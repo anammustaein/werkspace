@@ -1,44 +1,98 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function Status() {
+  const [workMode, setWorkMode] = useState("");
+  const [status, setStatus] = useState("");
 
-    const handleUpdateStatus = (event) => {
-        event.preventDefault();
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      fetch('/api/user/checklogin')
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error({
+            message: 'No user logged in'
+          })
+        }
+        return res.json();
+      }).then((data) => {
+        console.log(data)
+        setStatus(data.status)
+        setWorkMode(data.workMode)
+      }).catch((err) => {
+        console.log(err)
+      })
+    };
 
-  return (
-    <div className="status">
-      <div>
-        <form>
-          <div className="status">
-            <label>Status: </label>
-            <select name="status">
-              <option value="available">Available</option>
-              <option value="away">Away</option>
-              <option value="busy">Busy</option>
-              <option value="on-leave">On Leave</option>
-              <option value="sick-leave">Sick Leave</option>
-              <option value="offline">Offline</option>
-            </select>
-          </div>
-          <div className="work-mode">
-            <label>Work Mode: </label>
-            <select name="work-mode">
-              <option value="in-office">In office</option>
-              <option value="remote-home">Remote - Home</option>
-              <option value="remote-outside">Remote - Outside</option>
-              <option value="remote-overseas">Remote - Overseas</option>
-              <option value="offline">Offline</option>
-            </select>
-          </div>
-          <input type="submit" value="Update Status" onClick={handleUpdateStatus}/>
-        </form>
+    fetchData();
+  });
+
+  const handleUpdateStatus = async (event) => {
+    const status = event.target.value
+    
+    fetch('/api/user/updatestatus', {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({status})
+    }).then((res) => {
+      return res.json();
+    }).then((data) => {
+      console.log(data)
+      setStatus(data.status)
+    }).catch((err) => {
+      console.log(err)
+    })
+};
+
+const handleUpdateWorkMode = async (event) => {
+  const workMode = event.target.value
+  
+  fetch('/api/user/updateworkmode', {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({workMode})
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+    console.log(data)
+    setWorkMode(data.workMode)
+  }).catch((err) => {
+    console.log(err)
+  })
+};
+
+return (
+<div className="status">
+  <div>
+      <div className="status">
+        <label>Status: </label>
+        <select name="status" value={status} onChange={handleUpdateStatus}>
+          <option value="Available">Available</option>
+          <option value="Away">Away</option>
+          <option value="Busy">Busy</option>
+          <option value="On leave">On leave</option>
+          <option value="On medical leave">On medical leave</option>
+          <option value="Offline">Offline</option>
+        </select>
       </div>
-      <div className="user-name">
-        <span>User Name</span>
+      <div className="work-mode">
+        <label>Work Mode: </label>
+        <select name="workMode" value={workMode} onChange={handleUpdateWorkMode}>
+          <option value="In office">In office</option>
+          <option value="Remote (home)">Remote - Home</option>
+          <option value="Remote (outside)">Remote - Outside</option>
+          <option value="Remote (overseas)">Remote - Overseas</option>
+        </select>
       </div>
-    </div>
-  );
+  </div>
+  <div className="user-name">
+    <span>User Name</span>
+  </div>
+</div>
+);
 }
 
 export default Status;

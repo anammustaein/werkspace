@@ -96,7 +96,9 @@ const checkLogin = async (req, res) => {
             message: 'User logged in',
             id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            workMode: user.workMode,
+            status: user.status
         })
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -158,6 +160,7 @@ const updateUserProfile = async (req, res) => {
     const password = bcrypt.hashSync(req.body.password, 10)
     const department = req.body.department
     const designation = req.body.designation
+    const workingHours = req.body.workingHours
 
     try {
         const userId = req.session.userId
@@ -165,7 +168,7 @@ const updateUserProfile = async (req, res) => {
         const existingUser = await User.findOne({ email: email })
 
         // Check for empty fields
-        if ((!name) || (!email) || (!password) || (!department) || (!designation)) {
+        if ((!name) || (!email) || (!password) || (!department) || (!designation) || (!workingHours)) {
             res.status(400).json({
                 message: 'Required fields cannot be empty'
             })
@@ -185,6 +188,7 @@ const updateUserProfile = async (req, res) => {
         user.password = password
         user.department = department
         user.designation = designation
+        user.workingHours = workingHours
 
         await user.save()
         res.status(202).json({
@@ -201,8 +205,6 @@ const updateUserProfile = async (req, res) => {
 
 // Update user work status
 const updateUserStatus = async (req, res) => {
-    const workingHours = req.body.workingHours
-    const workMode = req.body.workMode
     const status = req.body.status
 
     try {
@@ -210,22 +212,51 @@ const updateUserStatus = async (req, res) => {
         const user = await User.findById(userId)
 
         // Check for empty fields
-        if ((!workingHours) || (!workMode) || (!status)) {
+        if ((!status)) {
             res.status(400).json({
-                message: 'Required fields cannot be empty'
+                message: 'Required field cannot be empty'
             })
             return
         }
 
-        user.workingHours = workingHours
-        user.workMode = workMode
         user.status = status
 
         await user.save()
         res.status(202).json({
             message: 'Status updated successfully',
             id: user.id,
-            name: user.name
+            name: user.name,
+            status: user.status
+        })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
+
+// Update user workMode
+const updateUserWorkMode = async (req, res) => {
+    const workMode = req.body.workMode
+
+    try {
+        const userId = req.session.userId
+        const user = await User.findById(userId)
+
+        // Check for empty fields
+        if ((!workMode)) {
+            res.status(400).json({
+                message: 'Required field cannot be empty'
+            })
+            return
+        }
+
+        user.workMode = workMode
+
+        await user.save()
+        res.status(202).json({
+            message: 'Work mode updated successfully',
+            id: user.id,
+            name: user.name,
+            workMode: user.workMode
         })
     } catch (err) {
         res.status(500).json({ message: err.message })
@@ -256,4 +287,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, logoutUser, deleteUser}
+module.exports = {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, updateUserWorkMode, logoutUser, deleteUser}
