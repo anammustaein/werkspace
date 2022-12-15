@@ -79,7 +79,7 @@ function Signup() {
                     <select name="department">
                         <option value="Editorial">Editorial</option>
                         <option value="Visuals">Visuals</option>
-                        <option value="Audience-growth">Audience Growth</option>
+                        <option value="Audience Growth">Audience Growth</option>
                     </select>
                     <br/>
                     <label>Designation:</label>

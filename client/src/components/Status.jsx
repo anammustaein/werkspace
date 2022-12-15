@@ -69,7 +69,7 @@ return (
   <div>
       <div className="status">
         <label>Status: </label>
-        <select name="status" value={status} onChange={handleUpdateStatus}>
+        <select name="status" defaultValue={status} onChange={handleUpdateStatus}>
           <option value="Available">Available</option>
           <option value="Away">Away</option>
           <option value="Busy">Busy</option>
@@ -80,7 +80,7 @@ return (
       </div>
       <div className="work-mode">
         <label>Work Mode: </label>
-        <select name="workMode" value={workMode} onChange={handleUpdateWorkMode}>
+        <select name="workMode" defaultValue={workMode} onChange={handleUpdateWorkMode}>
           <option value="In office">In office</option>
           <option value="Remote (home)">Remote - Home</option>
           <option value="Remote (outside)">Remote - Outside</option>

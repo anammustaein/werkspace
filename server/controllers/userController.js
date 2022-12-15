@@ -97,6 +97,9 @@ const checkLogin = async (req, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
+            deparment: user.department,
+            designation: user.designation,
+            workingHours: user.workingHours,
             workMode: user.workMode,
             status: user.status
         })
