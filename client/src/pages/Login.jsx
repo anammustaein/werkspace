@@ -1,20 +1,41 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateLoggedInUser } from '../redux/user';
 
 function Login() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const userId = useSelector((state) => state.user.id);
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
+    const [loginFail, setLoginFail] = useState(false)
+
+    useEffect(() => {
+        if (userId === "") {
+            fetch('/api/users/checklogin').then((res) => {
+                if (res.status === 200){
+                    return res.json()
+                }
+                throw new Error({
+                    message: "No user logged in"
+                })
+            }).then((data) => {
+                dispatch(updateLoggedInUser(data))
+                navigate('/home')
+            }).catch((err) => {
+                console.log(err)
+            })
+        } else {
+            navigate('/home')
+        }
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log (
-            "Email:", email, "Password:", password
-        )
+        const email = event.target.email.value
+        const password = event.target.password.value
 
-        fetch('api/user/login', {
+        fetch('/api/user/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,35 +43,35 @@ function Login() {
             body:JSON.stringify({email, password})
         }).then((res) => {
             console.log(res)
+            if (res.status !== 202) {
+                setLoginFail(true)
+                throw new Error({
+                    message: "Login failed"
+                })
+            }
+            return res.json()
+        }).then((data) => {
+            console.log(data)
+            dispatch(updateLoggedInUser(data))
+            navigate('/home')
+        }).catch((err) => {
+            console.log(err)
         })
-    }
+    };
 
     return (
         <div>
             <div className="login-form">
                 <h1>Login</h1>
-                <form
-                autoComplete="off"
-                onSubmit={handleSubmit}>
+                {loginFail && <span>Login failed</span>}
+                <form autoComplete="off" onSubmit={handleSubmit}>
                     <label>Email:</label>
                     <br/>
-                    <input 
-                    type="email" 
-                    id="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    required
-                    />
+                    <input type="email" name="email" required />
                     <br/>
                     <label>Password:</label>
                     <br/>
-                    <input 
-                    type="password" 
-                    id="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    required
-                    />
+                    <input type="password" name="password" required />
                     <br/>
                     <button>Log in</button>
                     </form>

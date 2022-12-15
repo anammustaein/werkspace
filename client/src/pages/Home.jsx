@@ -1,10 +1,12 @@
 import React from 'react';
 import ScheduleCard from '../components/ScheduleCard';
 import Status from '../components/Status';
+import Navbar from "../components/Navbar";
 
 function Home() {
     return (
         <div>
+            <Navbar />
             <Status />
             <div className="user-details">
                 <h1>User Name</h1>

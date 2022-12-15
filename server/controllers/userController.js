@@ -36,7 +36,12 @@ const registerUser = async (req, res) => {
         } else {
             const newUser = await user.save()
             req.session.userId = newUser._id
-            res.status(201).json(newUser)
+            res.status(201).json({
+                message: 'New user created',
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email
+            })
         }
     } catch (err) {
         res.status(400).json({ message: err.message })
@@ -61,7 +66,8 @@ const loginUser = async (req, res) => {
             res.status(202).json({ 
                 message: 'Login successful',
                 id: user._id,
-                name: user.name
+                name: user.name,
+                email: user.email
             })
         } else {
             req.session.userId = null
@@ -70,6 +76,28 @@ const loginUser = async (req, res) => {
             })
             return
         }
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+}
+
+// Check user login
+const checkLogin = async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId).exec()
+        if (!user) {
+            res.status(404).json({
+                message: 'No user is logged in'
+            })
+            return
+        }
+
+        res.status(200).json({
+            message: 'User logged in',
+            id: user._id,
+            name: user.name,
+            email: user.email
+        })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -228,4 +256,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {userList, registerUser, loginUser, searchUser, userTaskList, updateUserProfile, updateUserStatus, logoutUser, deleteUser}
+module.exports = {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, logoutUser, deleteUser}

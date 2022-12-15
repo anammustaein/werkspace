@@ -1,5 +1,6 @@
 import React from 'react';
 import Status from '../components/Status';
+import Navbar from "../components/Navbar";
 
 function EditProfile() {
 
@@ -10,6 +11,7 @@ function EditProfile() {
 
     return (
         <div>
+            <Navbar />
             <Status />
             <div className="edit-profile-form">
                 <h1>Edit Profile</h1>

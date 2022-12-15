@@ -1,5 +1,6 @@
 import React from 'react';
 import Status from '../components/Status';
+import Navbar from "../components/Navbar";
 
 function AddTask() {
 
@@ -10,6 +11,7 @@ function AddTask() {
 
     return (
         <div>
+            <Navbar />
             <Status />
             <h1>Add Task</h1>
             <div className="addtask-form">
