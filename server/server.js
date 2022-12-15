@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const session = require("express-session")
+const cors = require("cors")
 const path = require('path')
 
 const MONGO_URI = process.env.MONGO_URI
@@ -17,6 +18,7 @@ db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to database'))
 
 app.use(express.json())
+app.use(cors())
 app.use(
     session({
       secret: process.env.SECRET,
@@ -36,10 +38,5 @@ app.use('/api/task', taskRouter)
 // Seed data
 const seedData = require('./controllers/seedDataController')
 app.post('/seed', seedData)
-
-// Connect to front end
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve('../client/index.html'));
-});
 
 app.listen(PORT, () => console.log('Server started'))
