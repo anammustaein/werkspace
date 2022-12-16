@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function Status() {
   const [workMode, setWorkMode] = useState("");
@@ -24,7 +25,7 @@ function Status() {
     };
 
     fetchData();
-  });
+  }, []);
 
   const handleUpdateStatus = async (event) => {
     const status = event.target.value
@@ -89,7 +90,7 @@ return (
       </div>
   </div>
   <div className="user-name">
-    <span>User Name</span>
+    <span>User name</span>
   </div>
 </div>
 );

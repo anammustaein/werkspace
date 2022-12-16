@@ -36,7 +36,7 @@ function EditProfile() {
         };
 
         fetchData();
-    });
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();

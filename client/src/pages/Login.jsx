@@ -13,7 +13,7 @@ function Login() {
     useEffect(() => {
         if (userId === "") {
             const fetchData = async () => {
-                fetch('/api/users/checklogin').then((res) => {
+                fetch('/api/user/checklogin').then((res) => {
                     if (res.status === 200){
                         return res.json()
                     }
