@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function Status() {
+  const [userName, setUserName] = useState("");
   const [workMode, setWorkMode] = useState("");
   const [status, setStatus] = useState("");
 
@@ -17,6 +18,7 @@ function Status() {
         return res.json();
       }).then((data) => {
         console.log(data)
+        setUserName(data.name)
         setStatus(data.status)
         setWorkMode(data.workMode)
       }).catch((err) => {
@@ -90,7 +92,7 @@ return (
       </div>
   </div>
   <div className="user-name">
-    <span>User name</span>
+    <span>Logged in: {userName}</span>
   </div>
 </div>
 );

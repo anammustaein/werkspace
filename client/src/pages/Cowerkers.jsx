@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Status from '../components/Status';
 import CowerkerCard from '../components/CowerekerCard';
 import Navbar from "../components/Navbar";
+// import { useNavigate } from 'react-router-dom';
 
 function Cowerkers() {
+    // const navigate = useNavigate();
     const [userList, setUserList] = useState([]);
     const editorialList = userList.filter(user => user.department === "Editorial")
     const visualsList = userList.filter(user => user.department === "Visuals")
@@ -32,6 +34,10 @@ function Cowerkers() {
     console.log(visualsList);
     console.log(audienceGrowthList);
 
+    // const handleViewCowerker = () => {
+    //     navigate('/cowerkers/schedule')
+    // };
+
     return (
         <div>
             <Navbar />
@@ -47,6 +53,7 @@ function Cowerkers() {
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
+                    onClick={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>
@@ -60,6 +67,7 @@ function Cowerkers() {
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
+                    onClick={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>
@@ -73,6 +81,7 @@ function Cowerkers() {
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
+                    viewCowerker={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>

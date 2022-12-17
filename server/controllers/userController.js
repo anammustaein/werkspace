@@ -97,7 +97,7 @@ const checkLogin = async (req, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
-            deparment: user.department,
+            department: user.department,
             designation: user.designation,
             workingHours: user.workingHours,
             workMode: user.workMode,
@@ -290,4 +290,9 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, updateUserWorkMode, logoutUser, deleteUser}
+// Find user by ID
+const findUser = async (req, res) => {
+    res.json(res.user)
+}
+
+module.exports = {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, updateUserWorkMode, logoutUser, deleteUser, findUser}

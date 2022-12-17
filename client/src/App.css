@@ -13,10 +13,11 @@
 }
 
 .schedule-card {
-  height: 150px;
-  width: 800px;
+  height: 200px;
+  width: 1000px;
   background-color: #555;
   background-color: lightgray;
   text-align: center;
   padding: 20px;
+  margin: 20px;
 }

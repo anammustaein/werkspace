@@ -1,6 +1,6 @@
 const express = require('express')
 const userRouter = express.Router()
-const {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, updateUserWorkMode, logoutUser, deleteUser} = require("../controllers/userController")
+const {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, updateUserProfile, updateUserStatus, updateUserWorkMode, logoutUser, deleteUser, findUser} = require("../controllers/userController")
 
 // Middleware
 const {getUser} = require('../middleware/getUser')
@@ -18,5 +18,6 @@ userRouter.patch('/updatestatus', protect, updateUserStatus) // session required
 userRouter.patch('/updateworkmode', protect, updateUserWorkMode) // session required (done)
 userRouter.post('/logout', logoutUser) // session required (done)
 userRouter.delete('/delete/:id', getUser, deleteUser)
+userRouter.get('/finduser/:id', getUser, findUser)
 
 module.exports = userRouter;

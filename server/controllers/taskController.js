@@ -169,13 +169,21 @@ const editTaskById = async (req, res) => {
 
 // Delete task by ID
 const deleteTaskById = async (req, res) => {
+    const id = req.body._id;
     try {
-        await res.task.remove()
-        res.status(200).json({ 
-            message: 'Successfully deleted task' 
-        })
-    } catch (err) {
-        res.status(500).json({ 
+        const task = await Task.findByIdAndDelete(id)
+        
+        if (task === null) {
+            res.status(400).json({
+                message: "Incorrect ID"
+            })
+        } else {
+            res.status(200).json({
+                message: "Successfully deleted task"
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
             message: err.message 
         })
     }
