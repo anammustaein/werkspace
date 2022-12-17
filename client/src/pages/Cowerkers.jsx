@@ -53,7 +53,7 @@ function Cowerkers() {
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
-                    onClick={handleViewCowerker(user._id)}
+                    // onClick={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>
@@ -67,7 +67,7 @@ function Cowerkers() {
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
-                    onClick={handleViewCowerker(user._id)}
+                    // onClick={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>
@@ -81,7 +81,7 @@ function Cowerkers() {
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
-                    viewCowerker={handleViewCowerker(user._id)}
+                    // viewCowerker={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>

@@ -49,31 +49,30 @@ function Home() {
     console.log(sortedTaskList);
 
     const handleTaskDelete = (taskId) => {
-        console.log("clicked");
-        // return async () => {
-        //   fetch("/api/task/delete", {
-        //     method: "DELETE",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({ _id: taskId }),
-        //   })
-        //     .then((res) => {
-        //       console.log(res);
-        //       if (res.status !== 200) {
-        //         throw new Error({ 
-        //             message: "Only creators can delete task" 
-        //         });
-        //       }
-        //       return res.json();
-        //     })
-        //     .then((data) => {
-        //       console.log(data);
-        //     })
-        //     .catch((error) => {
-        //       console.log(error);
-        //     });
-        // };
+        return async () => {
+          fetch("/api/task/delete", {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ _id: taskId }),
+          })
+            .then((res) => {
+              console.log(res);
+              if (res.status !== 200) {
+                throw new Error({ 
+                    message: "Only creators can delete task" 
+                });
+              }
+              return res.json();
+            })
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        };
       };
 
     return (
