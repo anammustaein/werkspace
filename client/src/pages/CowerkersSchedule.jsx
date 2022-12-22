@@ -23,9 +23,6 @@ function CowerkersSchedule() {
             return res.json()
         }).then((data) => {
             setTaskList(data)
-            // const updatedData = data.taskList
-            // setUserTaskList(updatedData)
-            // console.log(userTaskList)
         }).catch((err) => {
             console.log(err)
         })

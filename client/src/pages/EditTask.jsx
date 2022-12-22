@@ -15,10 +15,11 @@ function EditTask() {
         const location = event.target.location.value;
         const startTime = event.target.startTime.value;
         const endTime = event.target.endTime.value;
+        const createdBy = loggedInUser._id;
         const attendees = [loggedInUser._id];
 
-        fetch('api/task/create', {
-            method: "POST",
+        fetch('api/task/edit', {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -29,6 +30,7 @@ function EditTask() {
                 location,
                 startTime,
                 endTime,
+                createdBy,
                 attendees
             })
         }).then((res) => {
