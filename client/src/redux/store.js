@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./user";
+import loggedInUserReducer from "./loggedInUser";
+import selectedUserReducer from "./selectedUser";
+import selectedTaskReducer from "./selectedTask";
 
 export default configureStore({
     reducer: {
-        user: userReducer,
+        loggedInUser: loggedInUserReducer,
+        selectedUser: selectedUserReducer,
+        selectedTask: selectedTaskReducer,
     }
 });

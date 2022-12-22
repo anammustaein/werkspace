@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateLoggedInUser } from '../redux/user';
+import { loggedInUserActions } from '../redux/loggedInUser';
+// import Button from 'react-bootstrap/Button';
+// import Form from 'react-bootstrap/Form';
+// import Container from 'react-bootstrap/Container';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
 
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userId = useSelector((state) => state.user.id);
+    const loggedInUser = useSelector((state)=>state.loggedInUser)
 
     const [loginFail, setLoginFail] = useState(false)
 
     useEffect(() => {
-        if (userId === "") {
+        if (loggedInUser._id === "") {
             const fetchData = async () => {
                 fetch('/api/user/checklogin').then((res) => {
                     if (res.status === 200){
@@ -21,7 +26,7 @@ function Login() {
                         message: "No user logged in"
                     })
                 }).then((data) => {
-                    dispatch(updateLoggedInUser(data))
+                    dispatch(loggedInUserActions.updateLoggedInUser(data))
                     navigate('/home')
                 }).catch((err) => {
                     console.log(err)
@@ -54,7 +59,7 @@ function Login() {
             return res.json()
         }).then((data) => {
             console.log(data)
-            dispatch(updateLoggedInUser(data))
+            dispatch(loggedInUserActions.updateLoggedInUser(data))
             navigate('/home')
         }).catch((err) => {
             console.log(err)
@@ -81,6 +86,18 @@ function Login() {
             <div className="form-base">
                 <p>Don't have an account? Sign up <Link to="/signup">here</Link>.</p>
             </div>
+            {/* <h1>werkspace</h1>
+            <Form className="rounded p-4 p-sm-3">
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" />
+                </Form.Group>
+                <Button variant="primary" type="submit">Log in</Button>
+            </Form> */}
         </div>
     )
 }

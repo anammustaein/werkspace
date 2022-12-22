@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { updateLoggedInUser } from '../redux/user';
+import { loggedInUserActions } from '../redux/loggedInUser';
 
 function Navbar() {
     const dispatch = useDispatch();
@@ -12,10 +12,14 @@ function Navbar() {
             method: "POST"
         }).then((res) => {
             if (res.status === 202) {
-                dispatch(updateLoggedInUser({
+                dispatch(loggedInUserActions.updateLoggedInUser({
                     id: "",
                     name: "",
-                    email: ""
+                    email: "",
+                    department: "",
+                    designation: "",
+                    workingHours: "",
+                    status: ""
                 }))
             }
             navigate('/login')
@@ -37,6 +41,6 @@ function Navbar() {
             <div><Link onClick={handleLogout} className="link">Logout</Link></div>
         </div>
     )
-};
+}
 
 export default Navbar;

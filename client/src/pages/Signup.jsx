@@ -1,12 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateLoggedInUser } from '../redux/user';
+import { loggedInUserActions } from '../redux/loggedInUser';
 
 function Signup() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userId = useSelector((state) => state.user.id);
+    const loggedInUser = useSelector((state)=>state.loggedInUser)
+
+    useEffect(() => {
+        if (loggedInUser._id === "") {
+            const fetchData = async () => {
+                fetch('/api/user/checklogin').then((res) => {
+                    if (res.status === 200){
+                        return res.json()
+                    }
+                    throw new Error({
+                        message: "No user logged in"
+                    })
+                }).then((data) => {
+                    dispatch(loggedInUserActions.updateLoggedInUser(data))
+                    navigate('/home')
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
+            fetchData();
+        }
+        return;
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -43,14 +65,12 @@ function Signup() {
                 })
             }
             if (res.status !== 201) {
-                throw new Error({
-                    message: data.message
-                })
+                throw new Error
             }
             return res.json()
         }).then((data) => {
             console.log(data)
-            dispatch(updateLoggedInUser(data))
+            dispatch(loggedInUserActions.updateLoggedInUser(data))
             navigate('/home')
         }).catch((err) => {
             console.log(err)
@@ -100,6 +120,6 @@ function Signup() {
             </div>
         </div>
     )
-};
+}
 
 export default Signup;

@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 const session = require("express-session")
 const cors = require("cors")
 const path = require('path')
+// const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser');
 
 const MONGO_URI = process.env.MONGO_URI
 const PORT = process.env.PORT
@@ -26,6 +28,7 @@ app.use(
       saveUninitialized: true,
     })
   );
+app.use(cookieParser())
 
 // User router
 const userRouter = require('./routes/user')

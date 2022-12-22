@@ -34,10 +34,6 @@ function Cowerkers() {
     console.log(visualsList);
     console.log(audienceGrowthList);
 
-    // const handleViewCowerker = () => {
-    //     navigate('/cowerkers/schedule')
-    // };
-
     return (
         <div>
             <Navbar />
@@ -48,12 +44,12 @@ function Cowerkers() {
                 {visualsList.map((user, index) => (
                     <CowerkerCard 
                     key={index} 
+                    _id={user._id}
                     name={user.name} 
                     designation={user.designation} 
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
-                    // onClick={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>
@@ -62,12 +58,12 @@ function Cowerkers() {
                 {editorialList.map((user, index) => (
                     <CowerkerCard 
                     key={index} 
+                    _id={user._id}
                     name={user.name} 
                     designation={user.designation} 
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
-                    // onClick={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>
@@ -76,12 +72,12 @@ function Cowerkers() {
                 {audienceGrowthList.map((user, index) => (
                     <CowerkerCard 
                     key={index} 
+                    _id={user._id}
                     name={user.name} 
                     designation={user.designation} 
                     status={user.status}
                     workMode={user.workMode}
                     workingHours={user.workingHours}
-                    // viewCowerker={handleViewCowerker(user._id)}
                     />
                 ))}
             </div>

@@ -5,6 +5,7 @@ const {userList, registerUser, loginUser, checkLogin, searchUser, userTaskList, 
 // Middleware
 const {getUser} = require('../middleware/getUser')
 const {protect} = require('../middleware/protect')
+// const {auth} = require('../middleware/auth')
 
 // Routes
 userRouter.get('/userlist', userList)

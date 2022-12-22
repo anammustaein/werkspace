@@ -3,21 +3,8 @@ import Status from '../components/Status';
 import Navbar from "../components/Navbar";
 import { useSelector } from 'react-redux';
 
-function AddTask() {
+function EditTask() {
     const loggedInUser = useSelector((state)=>state.loggedInUser)
-    // const [userId, setUserId] = useState("")
-
-    // const fetchData = async () => {
-    //     fetch('/api/user/checklogin').then((res) => {
-    //         return res.json()
-    //     }).then((data) => {
-    //         setUserId(data.id)
-    //     }).catch((err) => {
-    //         console.log(err)
-    //     })
-    // }
-
-    // fetchData();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -62,7 +49,7 @@ function AddTask() {
         <div>
             <Navbar />
             <Status />
-            <h1>Add Task</h1>
+            <h1>Edit Task</h1>
             <div className="addtask-form">
                 <form onSubmit={handleSubmit}>
                     <label>Title:</label>
@@ -79,11 +66,11 @@ function AddTask() {
                     <span> - </span>
                     <input type="datetime-local" name="endTime"/>
                     <br/>
-                    <button>Add Task</button>
+                    <button>Update</button>
                 </form>
             </div>
         </div>
     )
 }
 
-export default AddTask;
+export default EditTask;

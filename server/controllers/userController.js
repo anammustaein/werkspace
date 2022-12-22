@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const Task = require('../models/task')
 const bcrypt = require('bcrypt')
+// const jwt = require("jsonwebtoken")
 
 // Show all users
 const userList = async (req, res) => {
@@ -38,7 +39,7 @@ const registerUser = async (req, res) => {
             req.session.userId = newUser._id
             res.status(201).json({
                 message: 'New user created',
-                id: newUser._id,
+                _id: newUser._id,
                 name: newUser.name,
                 email: newUser.email
             })
@@ -59,21 +60,36 @@ const loginUser = async (req, res) => {
             res.status(404).json({ message: 'User not found' })
             return
         }
+        
 
         const loginPass = bcrypt.compareSync(password, user.password)
         if (loginPass) {
             req.session.userId = user._id
             res.status(202).json({ 
                 message: 'Login successful',
-                id: user._id,
+                _id: user._id,
                 name: user.name,
                 email: user.email
             })
+
+            // const token = jwt.sign({user}, process.env.SECRET)
+
+            // res.status(202).json({
+            //     message: 'Login successful',
+            //     _id: user._id,
+            //     name: user.name,
+            //     email: user.email,
+            //     token: token
+            // })
+
         } else {
             req.session.userId = null
             res.status(401).json({
                 message: 'Password incorrect'
             })
+            // res.status(403).json({
+            //     message: 'Invalid login'
+            // })
             return
         }
     } catch (err) {
@@ -94,7 +110,7 @@ const checkLogin = async (req, res) => {
 
         res.status(200).json({
             message: 'User logged in',
-            id: user._id,
+            _id: user._id,
             name: user.name,
             email: user.email,
             department: user.department,
@@ -135,7 +151,7 @@ const searchUser = async (req, res) => {
     }
 }
 
-// Show user's task list (by user id)
+// Show logged-in user's task list
 const userTaskList = async (req, res) => {
     try {
         // const userId = req.params.id
