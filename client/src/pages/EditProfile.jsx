@@ -90,11 +90,11 @@ function EditProfile() {
                 <form onSubmit={handleSubmit}>
                     <label>Name:</label>
                     <br/>
-                    <input type="text" name="name" value={name} required/>
+                    <input type="text" name="name" defaultValue={name} required/>
                     <br/>
                     <label>Email:</label>
                     <br/>
-                    <input type="email" name="email" value={email} required/>
+                    <input type="email" name="email" defaultValue={email} required/>
                     <br/>
                     <label>Password:</label>
                     <br/>
@@ -102,7 +102,7 @@ function EditProfile() {
                     <br/>
                     <label>Department:</label>
                     <br/>
-                    <select name="department" value={department}>
+                    <select name="department" defaultValue={department}>
                         <option value="Editorial">Editorial</option>
                         <option value="Visuals">Visuals</option>
                         <option value="Audience Growth">Audience Growth</option>
